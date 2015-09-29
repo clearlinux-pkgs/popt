@@ -4,7 +4,7 @@
 #
 Name     : popt
 Version  : 1.16
-Release  : 9
+Release  : 10
 URL      : http://rpm5.org/files/popt/popt-1.16.tar.gz
 Source0  : http://rpm5.org/files/popt/popt-1.16.tar.gz
 Summary  : popt library.
