@@ -4,12 +4,12 @@
 #
 Name     : popt
 Version  : 1.16
-Release  : 12
+Release  : 13
 URL      : http://rpm5.org/files/popt/popt-1.16.tar.gz
 Source0  : http://rpm5.org/files/popt/popt-1.16.tar.gz
 Summary  : popt library.
 Group    : Development/Tools
-License  : MIT
+License  : MIT X11
 Requires: popt-lib
 Requires: popt-locales
 Requires: popt-doc
@@ -23,9 +23,18 @@ to getopt(3), it contains a number of enhancements, including:
 Summary: dev components for the popt package.
 Group: Development
 Requires: popt-lib
+Provides: popt-devel
 
 %description dev
 dev components for the popt package.
+
+
+%package doc
+Summary: doc components for the popt package.
+Group: Documentation
+
+%description doc
+doc components for the popt package.
 
 
 %package lib
@@ -44,27 +53,26 @@ Group: Default
 locales components for the popt package.
 
 
-%package doc
-Summary: doc components for the popt package.
-Group: Documentation
-
-%description doc
-doc components for the popt package.
-
-
 %prep
 %setup -q -n popt-1.16
 
 %build
-%configure --disable-static 
-make V=1 %{?_smp_mflags}  
+export CFLAGS="$CFLAGS -ffunction-sections -Os "
+export FCFLAGS="$CFLAGS -ffunction-sections -Os "
+export FFLAGS="$CFLAGS -ffunction-sections -Os "
+export CXXFLAGS="$CXXFLAGS -ffunction-sections -Os "
+%configure --disable-static
+make V=1  %{?_smp_mflags}
 
 %check
-make V=1 %{?_smp_mflags} check
- 
+export http_proxy=http://127.0.0.1:9/
+export https_proxy=http://127.0.0.1:9/
+export no_proxy=localhost
+make VERBOSE=1 V=1 %{?_smp_mflags} check
+
 %install
 rm -rf %{buildroot}
-%make_install 
+%make_install
 %find_lang popt
 
 %files
@@ -76,13 +84,13 @@ rm -rf %{buildroot}
 /usr/lib64/*.so
 /usr/lib64/pkgconfig/*.pc
 
-%files lib
-%defattr(-,root,root,-)
-/usr/lib64/*.so.*
-
 %files doc
 %defattr(-,root,root,-)
 %doc /usr/share/man/man3/*
+
+%files lib
+%defattr(-,root,root,-)
+/usr/lib64/*.so.*
 
 %files locales -f popt.lang 
 %defattr(-,root,root,-)
