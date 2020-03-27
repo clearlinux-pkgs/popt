@@ -5,7 +5,7 @@
 %define keepstatic 1
 Name     : popt
 Version  : 1.16
-Release  : 19
+Release  : 20
 URL      : http://rpm5.org/files/popt/popt-1.16.tar.gz
 Source0  : http://rpm5.org/files/popt/popt-1.16.tar.gz
 Summary  : popt library.
