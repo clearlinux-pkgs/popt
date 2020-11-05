@@ -5,15 +5,15 @@
 %define keepstatic 1
 Name     : popt
 Version  : 1.16
-Release  : 20
+Release  : 21
 URL      : http://rpm5.org/files/popt/popt-1.16.tar.gz
 Source0  : http://rpm5.org/files/popt/popt-1.16.tar.gz
 Summary  : popt library.
 Group    : Development/Tools
 License  : MIT X11
-Requires: popt-lib
-Requires: popt-locales
-Requires: popt-doc
+Requires: popt-lib = %{version}-%{release}
+Requires: popt-license = %{version}-%{release}
+Requires: popt-locales = %{version}-%{release}
 BuildRequires : gettext
 
 %description
@@ -23,27 +23,29 @@ to getopt(3), it contains a number of enhancements, including:
 %package dev
 Summary: dev components for the popt package.
 Group: Development
-Requires: popt-lib
-Provides: popt-devel
+Requires: popt-lib = %{version}-%{release}
+Provides: popt-devel = %{version}-%{release}
+Requires: popt = %{version}-%{release}
 
 %description dev
 dev components for the popt package.
 
 
-%package doc
-Summary: doc components for the popt package.
-Group: Documentation
-
-%description doc
-doc components for the popt package.
-
-
 %package lib
 Summary: lib components for the popt package.
 Group: Libraries
+Requires: popt-license = %{version}-%{release}
 
 %description lib
 lib components for the popt package.
+
+
+%package license
+Summary: license components for the popt package.
+Group: Default
+
+%description license
+license components for the popt package.
 
 
 %package locales
@@ -54,32 +56,45 @@ Group: Default
 locales components for the popt package.
 
 
+%package staticdev
+Summary: staticdev components for the popt package.
+Group: Default
+Requires: popt-dev = %{version}-%{release}
+
+%description staticdev
+staticdev components for the popt package.
+
+
 %prep
 %setup -q -n popt-1.16
+cd %{_builddir}/popt-1.16
 
 %build
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
-export LANG=C
-export SOURCE_DATE_EPOCH=1526048353
-export CFLAGS="$CFLAGS -Os -fdata-sections -ffunction-sections -fno-semantic-interposition "
-export FCFLAGS="$CFLAGS -Os -fdata-sections -ffunction-sections -fno-semantic-interposition "
-export FFLAGS="$CFLAGS -Os -fdata-sections -ffunction-sections -fno-semantic-interposition "
-export CXXFLAGS="$CXXFLAGS -Os -fdata-sections -ffunction-sections -fno-semantic-interposition "
+export LANG=C.UTF-8
+export SOURCE_DATE_EPOCH=1604605298
+export GCC_IGNORE_WERROR=1
+export CFLAGS="$CFLAGS -Os -fdata-sections -ffunction-sections -fno-lto -fno-semantic-interposition "
+export FCFLAGS="$FFLAGS -Os -fdata-sections -ffunction-sections -fno-lto -fno-semantic-interposition "
+export FFLAGS="$FFLAGS -Os -fdata-sections -ffunction-sections -fno-lto -fno-semantic-interposition "
+export CXXFLAGS="$CXXFLAGS -Os -fdata-sections -ffunction-sections -fno-lto -fno-semantic-interposition "
 %configure
 make  %{?_smp_mflags}
 
 %check
-export LANG=C
+export LANG=C.UTF-8
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
-make VERBOSE=1 V=1 %{?_smp_mflags} check || :
+make %{?_smp_mflags} check || :
 
 %install
-export SOURCE_DATE_EPOCH=1526048353
+export SOURCE_DATE_EPOCH=1604605298
 rm -rf %{buildroot}
+mkdir -p %{buildroot}/usr/share/package-licenses/popt
+cp %{_builddir}/popt-1.16/COPYING %{buildroot}/usr/share/package-licenses/popt/61bb7a8ea669080cfc9e7dbf37079eae70b535fb
 %make_install
 %find_lang popt
 
@@ -88,19 +103,23 @@ rm -rf %{buildroot}
 
 %files dev
 %defattr(-,root,root,-)
-/usr/include/*.h
-/usr/lib64/*.a
+/usr/include/popt.h
 /usr/lib64/libpopt.so
 /usr/lib64/pkgconfig/popt.pc
-
-%files doc
-%defattr(-,root,root,-)
-%doc /usr/share/man/man3/*
+/usr/share/man/man3/popt.3
 
 %files lib
 %defattr(-,root,root,-)
 /usr/lib64/libpopt.so.0
 /usr/lib64/libpopt.so.0.0.0
+
+%files license
+%defattr(0644,root,root,0755)
+/usr/share/package-licenses/popt/61bb7a8ea669080cfc9e7dbf37079eae70b535fb
+
+%files staticdev
+%defattr(-,root,root,-)
+/usr/lib64/libpopt.a
 
 %files locales -f popt.lang
 %defattr(-,root,root,-)
