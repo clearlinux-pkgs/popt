@@ -1,5 +1,5 @@
 PKG_NAME := popt
-URL = http://rpm5.org/files/popt/popt-1.16.tar.gz
+URL = https://github.com/rpm-software-management/popt/archive/refs/tags/popt-1.18-release.tar.gz
 ARCHIVES = 
 
 include ../common/Makefile.common

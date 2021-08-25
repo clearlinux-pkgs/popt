@@ -4,10 +4,10 @@
 #
 %define keepstatic 1
 Name     : popt
-Version  : 1.16
-Release  : 21
-URL      : http://rpm5.org/files/popt/popt-1.16.tar.gz
-Source0  : http://rpm5.org/files/popt/popt-1.16.tar.gz
+Version  : 1.18
+Release  : 22
+URL      : https://github.com/rpm-software-management/popt/archive/refs/tags/popt-1.18-release.tar.gz
+Source0  : https://github.com/rpm-software-management/popt/archive/refs/tags/popt-1.18-release.tar.gz
 Summary  : popt library.
 Group    : Development/Tools
 License  : MIT X11
@@ -66,21 +66,21 @@ staticdev components for the popt package.
 
 
 %prep
-%setup -q -n popt-1.16
-cd %{_builddir}/popt-1.16
+%setup -q -n popt-popt-1.18-release
+cd %{_builddir}/popt-popt-1.18-release
 
 %build
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1604605298
+export SOURCE_DATE_EPOCH=1629912575
 export GCC_IGNORE_WERROR=1
 export CFLAGS="$CFLAGS -Os -fdata-sections -ffunction-sections -fno-lto -fno-semantic-interposition "
 export FCFLAGS="$FFLAGS -Os -fdata-sections -ffunction-sections -fno-lto -fno-semantic-interposition "
 export FFLAGS="$FFLAGS -Os -fdata-sections -ffunction-sections -fno-lto -fno-semantic-interposition "
 export CXXFLAGS="$CXXFLAGS -Os -fdata-sections -ffunction-sections -fno-lto -fno-semantic-interposition "
-%configure
+%autogen
 make  %{?_smp_mflags}
 
 %check
@@ -91,10 +91,10 @@ export no_proxy=localhost,127.0.0.1,0.0.0.0
 make %{?_smp_mflags} check || :
 
 %install
-export SOURCE_DATE_EPOCH=1604605298
+export SOURCE_DATE_EPOCH=1629912575
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/popt
-cp %{_builddir}/popt-1.16/COPYING %{buildroot}/usr/share/package-licenses/popt/61bb7a8ea669080cfc9e7dbf37079eae70b535fb
+cp %{_builddir}/popt-popt-1.18-release/COPYING %{buildroot}/usr/share/package-licenses/popt/61bb7a8ea669080cfc9e7dbf37079eae70b535fb
 %make_install
 %find_lang popt
 
@@ -111,7 +111,7 @@ cp %{_builddir}/popt-1.16/COPYING %{buildroot}/usr/share/package-licenses/popt/6
 %files lib
 %defattr(-,root,root,-)
 /usr/lib64/libpopt.so.0
-/usr/lib64/libpopt.so.0.0.0
+/usr/lib64/libpopt.so.0.0.1
 
 %files license
 %defattr(0644,root,root,0755)
