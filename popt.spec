@@ -5,7 +5,7 @@
 %define keepstatic 1
 Name     : popt
 Version  : 1.18
-Release  : 22
+Release  : 23
 URL      : https://github.com/rpm-software-management/popt/archive/refs/tags/popt-1.18-release.tar.gz
 Source0  : https://github.com/rpm-software-management/popt/archive/refs/tags/popt-1.18-release.tar.gz
 Summary  : popt library.
@@ -15,6 +15,7 @@ Requires: popt-lib = %{version}-%{release}
 Requires: popt-license = %{version}-%{release}
 Requires: popt-locales = %{version}-%{release}
 BuildRequires : gettext
+Patch1: 0001-Work-around-test-failures.patch
 
 %description
 This is the popt(3) command line option parsing library. While it is similiar
@@ -68,13 +69,14 @@ staticdev components for the popt package.
 %prep
 %setup -q -n popt-popt-1.18-release
 cd %{_builddir}/popt-popt-1.18-release
+%patch1 -p1
 
 %build
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1629912575
+export SOURCE_DATE_EPOCH=1630130000
 export GCC_IGNORE_WERROR=1
 export CFLAGS="$CFLAGS -Os -fdata-sections -ffunction-sections -fno-lto -fno-semantic-interposition "
 export FCFLAGS="$FFLAGS -Os -fdata-sections -ffunction-sections -fno-lto -fno-semantic-interposition "
@@ -91,7 +93,7 @@ export no_proxy=localhost,127.0.0.1,0.0.0.0
 make %{?_smp_mflags} check || :
 
 %install
-export SOURCE_DATE_EPOCH=1629912575
+export SOURCE_DATE_EPOCH=1630130000
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/popt
 cp %{_builddir}/popt-popt-1.18-release/COPYING %{buildroot}/usr/share/package-licenses/popt/61bb7a8ea669080cfc9e7dbf37079eae70b535fb
