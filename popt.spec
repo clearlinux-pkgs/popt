@@ -4,21 +4,20 @@
 #
 %define keepstatic 1
 Name     : popt
-Version  : 1.18
-Release  : 23
-URL      : https://github.com/rpm-software-management/popt/archive/refs/tags/popt-1.18-release.tar.gz
-Source0  : https://github.com/rpm-software-management/popt/archive/refs/tags/popt-1.18-release.tar.gz
+Version  : 1.19
+Release  : 24
+URL      : https://github.com/rpm-software-management/popt/archive/popt-1.19-release/popt-1.19.tar.gz
+Source0  : https://github.com/rpm-software-management/popt/archive/popt-1.19-release/popt-1.19.tar.gz
 Summary  : popt library.
 Group    : Development/Tools
-License  : MIT X11
+License  : MIT
 Requires: popt-lib = %{version}-%{release}
 Requires: popt-license = %{version}-%{release}
 Requires: popt-locales = %{version}-%{release}
 BuildRequires : gettext
-Patch1: 0001-Work-around-test-failures.patch
 
 %description
-This is the popt(3) command line option parsing library. While it is similiar
+This is the popt(3) command line option parsing library. While it is similar
 to getopt(3), it contains a number of enhancements, including:
 
 %package dev
@@ -67,16 +66,15 @@ staticdev components for the popt package.
 
 
 %prep
-%setup -q -n popt-popt-1.18-release
-cd %{_builddir}/popt-popt-1.18-release
-%patch1 -p1
+%setup -q -n popt-popt-1.19-release
+cd %{_builddir}/popt-popt-1.19-release
 
 %build
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1630130000
+export SOURCE_DATE_EPOCH=1663349000
 export GCC_IGNORE_WERROR=1
 export CFLAGS="$CFLAGS -Os -fdata-sections -ffunction-sections -fno-lto -fno-semantic-interposition "
 export FCFLAGS="$FFLAGS -Os -fdata-sections -ffunction-sections -fno-lto -fno-semantic-interposition "
@@ -93,10 +91,10 @@ export no_proxy=localhost,127.0.0.1,0.0.0.0
 make %{?_smp_mflags} check || :
 
 %install
-export SOURCE_DATE_EPOCH=1630130000
+export SOURCE_DATE_EPOCH=1663349000
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/popt
-cp %{_builddir}/popt-popt-1.18-release/COPYING %{buildroot}/usr/share/package-licenses/popt/61bb7a8ea669080cfc9e7dbf37079eae70b535fb
+cp %{_builddir}/popt-popt-%{version}-release/COPYING %{buildroot}/usr/share/package-licenses/popt/147c2337a4a0b73de6f7cb6f59c12e8dc5026212
 %make_install
 %find_lang popt
 
@@ -113,11 +111,11 @@ cp %{_builddir}/popt-popt-1.18-release/COPYING %{buildroot}/usr/share/package-li
 %files lib
 %defattr(-,root,root,-)
 /usr/lib64/libpopt.so.0
-/usr/lib64/libpopt.so.0.0.1
+/usr/lib64/libpopt.so.0.0.2
 
 %files license
 %defattr(0644,root,root,0755)
-/usr/share/package-licenses/popt/61bb7a8ea669080cfc9e7dbf37079eae70b535fb
+/usr/share/package-licenses/popt/147c2337a4a0b73de6f7cb6f59c12e8dc5026212
 
 %files staticdev
 %defattr(-,root,root,-)
